@@ -1,8 +1,58 @@
 # pybriger
+## 概要
     pythonを用いたORM(オブジェクトリレーショナルマッピング)です。
     SQLを直接書くことなく、オブジェクトを操作するようにデータベースを操作できます。
-## 実行方法
-    a
+## 特徴
+    既存のORMと違い。CSVファイルからデータベースをインポート/エクスポートできる機能があります。
+    
+## インストール方法
+    pip install pybriger
+
+## 使い方
+    <1,エンジンの定義>
+    from pybriger import *
+
+    engine = Engine(
+        sqlEngineName = "mysql",
+        hostName      = "localhost",
+        userName      = "ユーザ名",
+        password      = "パスワード",
+        database      = "データベース"
+    )
+    engine.launch() 
+
+    <2, テーブルスキーマの定義>
+    class User(Model):
+        id         = Column(Integer(), isPrimaryKey = True, isAutoIncrement= True)
+        name       = Column(VarChar(50))
+        email      = Column(VarChar(100))
+        age        = Column(Integer())
+
+    <3, テーブルの作成>
+    user = User.createTable()
+    user.execute()
+    user.commit()
+
+    <4, データの挿入>
+        user = User.insertRecord(id = 1, name = "name", age = 19)
+        user.execute()
+        user.commit()
+
+    <5, データの更新>
+        user = User.updateRecord(name = "a", age = 20)
+        user.where(id = 1)
+        user.execute()
+        user.commit()
+
+    <6, データの削除>
+        user = User.deleteRecord(id = 1) 
+        user.execute()
+        user.commit()
+    
+    <7, データの取得>
+        user   = engine.select(User, User.id, User.name)
+        result = user.where((User.age >= 20) & (User.age <= 29)).fetchall()
+    
 
 ## ファイル構成  
     [pybriger]                                          # Briger2 ORMのルートディレクトリ  
@@ -211,4 +261,10 @@
         │   └── __init__.py                             # modelパッケージ初期化ファイル  
         ├── README.md                                   # プロジェクト概要ドキュメント  
         └── __init__.py                                 # Briger2パッケージ初期化ファイル  
->>>>>>> 482d8ff (pybriger)
+
+## 作者・連絡先
+    name  : KazuhiroKondo
+    email : hkprr13@gmail.com
+
+## 変更履歴
+    0.1.0 : 初期バージョン
