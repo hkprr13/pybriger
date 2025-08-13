@@ -7,11 +7,11 @@
     既存のORMと違い。CSVファイルからデータベースをインポート/エクスポートできる機能があります。
     
 ## インストール方法
-    pip install pybriger
+    pip install pybridger
 
 ## 使い方
     <1,エンジンの定義>
-    from pybriger import *
+    from pybridger import *
 
     engine = Engine(
         sqlEngineName = "mysql",

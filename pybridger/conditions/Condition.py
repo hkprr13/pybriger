@@ -3,7 +3,8 @@ from ..column   import Column
 #-------------------------------------------------------------------------------
 class Condition:
     #---------------------------------------------------------------------------
-    def __init__(self, left, operator = None, right = None):
+    def __init__(self, tableName, left, operator = None, right = None):
+        self.tableName = tableName
         self.left     = left
         self.operator = operator
         self.right    = right
@@ -20,7 +21,10 @@ class Condition:
         if self.right is not None \
         and hasattr(self.right, "toSql"):
             rightSql, rightValues = self.right.toSql()
-            sql = f"{leftSql} {self.operator} {rightSql}"
+            if self.tableName:
+                sql = f"{self.tableName}.{leftSql} {self.operator} {rightSql}"
+            else:
+                sql = f"{leftSql} {self.operator} {rightSql}"
             return sql, leftValues + list(rightValues)
         
         # NULL判定(IS NULL / IS NOT NULL)
@@ -71,8 +75,8 @@ class Condition:
                leftValues + ([self.right] if self.right is not None else [])
     #---------------------------------------------------------------------------
     def __and__(self, other):
-        return Condition(self, "AND", other)
+        return Condition(None, self, "AND", other)
     #---------------------------------------------------------------------------
     def __or__(self, other):
-        return Condition(self, "OR", other)
+        return Condition(None, self, "OR", other)
 #-------------------------------------------------------------------------------

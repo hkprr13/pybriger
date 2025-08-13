@@ -1,4 +1,4 @@
-from pybriger import *
+from pybridger import *
 
 engine = Engine(
     sqlEngineName = "mysql",
