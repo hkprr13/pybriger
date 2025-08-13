@@ -146,6 +146,13 @@ class Column:
         self.foreignKeySql = foreignKey.toSql() if foreignKey else ""
     #---------------------------------------------------------------------------
     @public
+    def toSql(self):
+        if hasattr(self, "tableName") and hasattr(self, "columnName"):
+            sql = f"{self.tableName}.{self.columnName}"
+        else:
+            sql = f"{self.columnName}"
+        return sql, []
+    @public
     def like(self, value):
         """LIKE演算子"""
         return Condition(self.columnName, "LIKE", value)
@@ -217,4 +224,5 @@ class Column:
         OR演算子 OR
         """
         return ConditionGroup(self.columnName, "OR", value)
+        
 #-------------------------------------------------------------------------------

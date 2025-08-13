@@ -31,6 +31,6 @@ class Comment(Model):
 
 
 engine.select(User, User.id, User.name).innerJoin(
-    Post, (User.age == Post.user_id) & (Comment.id == Post.title)
+    Post, (User.age == Post.user_id) & (Comment.id == Post.title) 
 ) 
 

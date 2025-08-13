@@ -1,4 +1,6 @@
 #-------------------------------------------------------------------------------
+from ..column   import Column
+#-------------------------------------------------------------------------------
 class Condition:
     #---------------------------------------------------------------------------
     def __init__(self, left, operator = None, right = None):
@@ -15,7 +17,12 @@ class Condition:
         else:
             leftSql    = str(self.left)
             leftValues = []
-
+        if self.right is not None \
+        and hasattr(self.right, "toSql"):
+            rightSql, rightValues = self.right.toSql()
+            sql = f"{leftSql} {self.operator} {rightSql}"
+            return sql, leftValues + list(rightValues)
+        
         # NULL判定(IS NULL / IS NOT NULL)
         if  isinstance(self.right, str) and self.right.upper() == "NULL":
             sql = f"{leftSql} {self.operator} NULL"
