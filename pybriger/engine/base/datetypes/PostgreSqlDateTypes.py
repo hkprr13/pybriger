@@ -37,4 +37,5 @@ class PostgreSqlDateTypes(SqlDateTypes):
     CIDR       = "CIDR"                # サブネット型
     GEOMETRY   = "GEOMETRY"            # 空間情報型
     PLACEHOLDER = "%s"                 # psycopg のプレースホルダー
+    AUTOINCREMENT = "AUTOINCREMENT" # 自動採番
 #-------------------------------------------------------------------------------

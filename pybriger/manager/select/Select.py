@@ -2,10 +2,18 @@
 from ..Base        import Base           # ベース
 from .GroupBy      import GroupBy        # GROUP BY
 from .Where        import Where          # WHERE
+from .join         import CrossJoin      # CROSS JOIN句
+from .join         import FullOuterJoin  # FULL OUTER JOIN句
+from .join         import InnerJoin      # INNER JOIN句
+from .join         import LeftJoin       # LEFT JOIN句
+from .join         import NaturalJoin    # NATURAL JOIN句
+from .join         import RightJoin      # RIGHT JOIN句
+from .join         import SelfJoin       # SELF JOIN句
 from ...column     import Column         # カラムクラス
 from ...conditions import Condition      # 条件クラス
 from ...conditions import ConditionGroup # 複数条件クラス
 from ...common     import public         # パブリックメソッド
+from ...model      import Model          # モデルクラス
 #-------------------------------------------------------------------------------
 class Select(Base):
     """SELECTクラス"""
@@ -267,4 +275,89 @@ class Select(Base):
             condition = condition,
             byColumn  = column.columnName
         )
+    #---------------------------------------------------------------------------
+    @public
+    def crossJoin(
+            self
+        ):
+        """
+        """
+        return CrossJoin(
+            tableName = self.tableName
+        )
+    #---------------------------------------------------------------------------
+    @public
+    def fullOuterJoin(
+            self
+        ):
+        """
+        """
+        return FullOuterJoin(
+            tableName = self.tableName
+        )
+    #---------------------------------------------------------------------------
+    @public
+    def innerJoin(
+            self,
+            joinTable : type[Model],
+            *condition   : Condition
+        ):
+        """
+        """
+        placeHolder = self.sqlEngine.PLACEHOLDER
+        parts  = []
+        values = []
+        for cond in condition:
+            sql, vals = cond.toSql(placeHolder)
+            parts.append(sql)
+            values.extend(vals)
+        whereClause = " AND ".join(parts)
+        values = tuple(values)
+        print(whereClause)
+        print(values)
+        return InnerJoin(
+            tableName = self.tableName
+        )
+    #---------------------------------------------------------------------------
+    @public
+    def leftJoin(
+            self
+        ):
+        """
+        """
+        return LeftJoin(
+            tableName = self.tableName
+        )
+    #---------------------------------------------------------------------------
+    @public 
+    def naturalJoin(
+            self
+        ):
+        """
+        
+        """
+        return NaturalJoin(
+            tableName = self.tableName
+        )
+    #---------------------------------------------------------------------------
+    @public
+    def RightJoin(
+            self
+        ):
+        """
+        """
+        return RightJoin(
+            tableName = self.tableName
+        )
+    #---------------------------------------------------------------------------
+    @public
+    def selfJoin(
+            self
+        ):
+        """
+        """
+        return SelfJoin(
+            tableName = self.tableName
+        )
+
 #-------------------------------------------------------------------------------

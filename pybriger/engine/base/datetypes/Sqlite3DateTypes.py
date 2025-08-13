@@ -38,4 +38,6 @@ class Sqlite3DateTypes(SqlDateTypes):
     PLACEHOLDER = "?"                   # sqlite3 モジュールのプレースホルダー
     AUTO        = "INTEGER PRIMARY KEY AUTOINCREMENT"  # 自動採番
     SERIAL      = "INTEGER PRIMARY KEY AUTOINCREMENT"  # PostgreSQLとの互換のため
+
+    AUTOINCREMENT = "AUTOINCREMENT" # 自動採番
 #-------------------------------------------------------------------------------

@@ -51,4 +51,6 @@ class MySqlDateTypes(SqlDateTypes):
     MULTILINESTRING    = "MULTILINESTRING"
     MULTIPOLYGON       = "MULTIPOLYGON"
     GEOMETRYCOLLECTION = "GEOMETRYCOLLECTION"
+    
+    AUTOINCREMENT = "AUTO_INCREMENT" # 自動採番
 #-------------------------------------------------------------------------------

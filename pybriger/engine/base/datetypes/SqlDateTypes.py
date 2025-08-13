@@ -57,4 +57,6 @@ class SqlDateTypes:
     MULTILINESTRING    = ""  # 複数線（GIS）
     MULTIPOLYGON       = ""  # 複数ポリゴン（GIS）
     GEOMETRYCOLLECTION = ""  # 複数の空間要素の集合（GIS）
+
+    AUTOINCREMENT      = "" # 自動採番
 #-------------------------------------------------------------------------------
