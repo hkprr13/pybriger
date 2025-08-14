@@ -9,6 +9,10 @@ from ..common             import private     # プライベートメソッド
 from ..common             import override    # オーバライドメソッド 
 #-------------------------------------------------------------------------------
 class Filed(Column):
+    """
+    フィールドクラスの基底クラス
+    カラムクラスを継承する。カラムクラスより設定に制限あり
+    """
     def __init__(
             self,
             dataType        : DataType,
