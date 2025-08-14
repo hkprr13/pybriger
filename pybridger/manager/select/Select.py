@@ -13,6 +13,7 @@ from ...column     import Column         # カラムクラス
 from ...conditions import Condition      # 条件クラス
 from ...conditions import ConditionGroup # 複数条件クラス
 from ...common     import public         # パブリックメソッド
+from ...common     import private        # プライベートメソッド 
 from ...model      import Model          # モデルクラス
 #-------------------------------------------------------------------------------
 class Select(Base):
@@ -21,7 +22,7 @@ class Select(Base):
     def __init__(
             self,
             tableName  : str, 
-            columns    : str,
+            columns,
         ) -> None:
         """"
         SELECTクラスの初期化
@@ -30,8 +31,25 @@ class Select(Base):
             columns   (str) : カラム
         """
         super().__init__(tableName)
-        self.__columns = columns
+        self.__columns     = self.__setColumns(columns)
+        self.__columnsList = self.__setColumnsList(columns)
         self.__query   = ""
+    #---------------------------------------------------------------------------
+    @private
+    def __setColumns(self, columns):
+        # columnsが引数として指定されていない場合は*として認識する
+        if len(columns) == 0:
+            cols = "*"
+        else:
+            cols = ", ".join(col.columnName for col in columns)
+        return cols
+    #---------------------------------------------------------------------------
+    @private
+    def __setColumnsList(self, columns : tuple[Column]):
+        columnsList = []
+        for col in columns:
+            columnsList.append(f"{col.tableName}.{col.columnName}")
+        return columnsList
     #---------------------------------------------------------------------------
     @property
     @public
@@ -278,26 +296,18 @@ class Select(Base):
     #---------------------------------------------------------------------------
     @public
     def crossJoin(
-            self
+            self,
+            joinTable : type[Model],
         ):
         """
         """
         return CrossJoin(
-            tableName = self.tableName
+            tableName = self.tableName,
+            joinTable = joinTable.tableName
         )
     #---------------------------------------------------------------------------
     @public
     def fullOuterJoin(
-            self
-        ):
-        """
-        """
-        return FullOuterJoin(
-            tableName = self.tableName
-        )
-    #---------------------------------------------------------------------------
-    @public
-    def innerJoin(
             self,
             joinTable : type[Model],
             *condition   : Condition
@@ -306,58 +316,106 @@ class Select(Base):
         """
         placeHolder = self.sqlEngine.PLACEHOLDER
         parts  = []
-        values = []
         for cond in condition:
             sql, vals = cond.toSql(placeHolder)
             parts.append(sql)
-            values.extend(vals)
-        whereClause = " AND ".join(parts)
-        values = tuple(values)
-        print(whereClause)
-        print(values)
+        joinSql = " AND ".join(parts)
+        return FullOuterJoin(
+            tableName = self.tableName,
+            joinTable = joinTable.tableName,
+            joinSql   = joinSql
+        )
+    #---------------------------------------------------------------------------
+    @public
+    def innerJoin(
+            self,
+            joinTable  : type[Model],
+            *condition : Condition
+        ):
+        """
+        """
+        placeHolder = self.sqlEngine.PLACEHOLDER
+        parts  = []
+        for cond in condition:
+            sql, vals = cond.toSql(placeHolder)
+            parts.append(sql)
+        joinSql = " AND ".join(parts)
         return InnerJoin(
-            tableName = self.tableName
+            tableName = self.tableName,
+            columns   = self.__columns,
+            joinTable = joinTable.tableName,
+            joinSql   = joinSql
         )
     #---------------------------------------------------------------------------
     @public
     def leftJoin(
-            self
+            self,
+            joinTable  : type[Model],
+            *condition : Condition
         ):
         """
+        
         """
+        columns = ""
+        for col in self.__columnsList:
+            columns += f"{col}, "
+        columns = columns[:-2]
+        placeHolder = self.sqlEngine.PLACEHOLDER
+        parts  = []
+        for cond in condition:
+            sql, vals = cond.toSql(placeHolder)
+            parts.append(sql)
+        joinSql = " AND ".join(parts)
         return LeftJoin(
-            tableName = self.tableName
+            tableName  = self.tableName,
+            columns    = columns,
+            joinTable  = joinTable.tableName,
+            joinSql    = joinSql
         )
     #---------------------------------------------------------------------------
     @public 
     def naturalJoin(
-            self
+            self,
+            joinTable  : type[Model],
         ):
         """
         
         """
         return NaturalJoin(
-            tableName = self.tableName
+            tableName = self.tableName,
+            columns   = self.__columns,
+            joinTable = joinTable.tableName,
         )
     #---------------------------------------------------------------------------
     @public
     def RightJoin(
-            self
+            self,
+            joinTable  : type[Model],
+            *condition : Condition
         ):
         """
+        
         """
+        columns = ""
+        for col in self.__columnsList:
+            columns += f"{col}, "
+        columns = columns[:-2]
+        placeHolder = self.sqlEngine.PLACEHOLDER
+        parts  = []
+        for cond in condition:
+            sql, vals = cond.toSql(placeHolder)
+            parts.append(sql)
+        joinSql = " AND ".join(parts)
         return RightJoin(
-            tableName = self.tableName
+            tableName  = self.tableName,
+            columns    = columns,
+            joinTable  = joinTable.tableName,
+            joinSql    = joinSql
         )
     #---------------------------------------------------------------------------
     @public
     def selfJoin(
             self
-        ):
-        """
-        """
-        return SelfJoin(
-            tableName = self.tableName
-        )
+        ): ...
 
 #-------------------------------------------------------------------------------

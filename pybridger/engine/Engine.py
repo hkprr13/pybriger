@@ -102,13 +102,8 @@ class Engine:
         Returns:
             Select : SELECTクラス
         """
-        # columnsが引数として指定されていない場合は*として認識する
-        if len(columns) == 0:
-            cols = "*"
-        else:
-            cols = ", ".join(col.columnName for col in columns)
         return Select(
             tableName  = table.tableName, # テーブル名 
-            columns    = cols,            # カラム
+            columns    = columns            # カラム
         )
 #-------------------------------------------------------------------------------

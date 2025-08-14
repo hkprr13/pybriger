@@ -30,7 +30,7 @@ class Comment(Model):
     content    = Column(Text())
 
 
-engine.select(User, User.id, User.name).innerJoin(
-    Post, (User.age == Post.user_id) & (Comment.id == Post.title) 
+join = engine.select(User, User.id, User.name, Post.id).leftJoin(
+    Post, (User.age == Post.user_id) 
 ) 
-
+print(join.query)
