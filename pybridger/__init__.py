@@ -53,6 +53,9 @@ from .migration import Migration
 # モデル定義
 from .model import Model, AsyncModel
 #-------------------------------------------------------------------------------
+# セッション
+from .session import Session
+#-------------------------------------------------------------------------------
 # トリガー
 from .Trigger import Trigger
 #-------------------------------------------------------------------------------
@@ -106,6 +109,9 @@ __all__ = [
 
     # Models
     "Model", "AsyncModel",
+    
+    # Session
+    "Session",
 
     # Trigger
     "Trigger",

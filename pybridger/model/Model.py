@@ -1,5 +1,6 @@
 #-------------------------------------------------------------------------------
 from .ModelMeta    import ModelMeta
+from ..config      import Config
 from ..column      import Column
 from ..common      import private
 from ..common      import public
@@ -627,7 +628,6 @@ class Model(metaclass = ModelMeta):
     @public
     def alterView(cls): ...
     #---------------------------------------------------------------------------
-    #---------------------------------------------------------------------------
     @classmethod
     @public
     def fromDict(cls, data : dict):
@@ -636,7 +636,6 @@ class Model(metaclass = ModelMeta):
             if hasattr(isinstance, key):
                 setattr(instance, key, value)
         return instance
-    #---------------------------------------------------------------------------
     #---------------------------------------------------------------------------
     def __and__(self, other):
         return f"{self} {other}"
