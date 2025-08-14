@@ -13,9 +13,7 @@ from ..conditions         import ConditionGroup # 条件クラス
 #-------------------------------------------------------------------------------
 class Column:
     """
-    SQLのカラムを表現するためのクラス
-    データ型、制約（主キー、NOT NULL、デフォルト値、ユニーク、外部キー）を定義し
-    テーブル作成用のSQL構築やクエリビルダーでの利用を目的とする
+    SQLのカラムを定義するためのクラス
     Attributes:
         columnName   (str)         : カラム名（Modelクラス側で自動設定）
         tableName    (str)         : テーブル名（Modelクラス側で自動設定）
@@ -60,19 +58,19 @@ class Column:
         self.unique     = unique
         self.foreignKey = foreignKey
         # SQLの設定
-        self.__setDataTypeSql(dataType)
-        self.__setPrimaryKeySql(isPrimaryKey)
-        self.__setAutoIncrement(isAutoIncrement)
-        self.__setDefaultSql(default)
-        self.__setNotNullSql(notNull)
-        self.__setUniqueSql(unique)
-        self.__setForeignKeySql(foreignKey)
+        self.setDataTypeSql(dataType)
+        self.setPrimaryKeySql(isPrimaryKey)
+        self.setAutoIncrement(isAutoIncrement)
+        self.setDefaultSql(default)
+        self.setNotNullSql(notNull)
+        self.setUniqueSql(unique)
+        self.setForeignKeySql(foreignKey)
         # カラム名とテーブル名
         self.columnName : str
         self.tableName  : str 
     #---------------------------------------------------------------------------
     @private
-    def __setDataTypeSql(self, dataType: DataType | None) -> None:
+    def setDataTypeSql(self, dataType: DataType | None) -> None:
         """
         データ型に応じたSQL文字列を設定する
         Args:
@@ -86,7 +84,7 @@ class Column:
             raise ValueError("データ型が指定されていません")
     #---------------------------------------------------------------------------
     @private
-    def __setPrimaryKeySql(self, isPrimaryKey : bool) -> None:
+    def setPrimaryKeySql(self, isPrimaryKey : bool) -> None:
         """
         PRIMARY KEY 制約をSQL文字列として設定する
         Args:
@@ -98,7 +96,7 @@ class Column:
             self.primaryKeySql = ""
     #---------------------------------------------------------------------------
     @private
-    def __setAutoIncrement(self, isAutoIncrement : bool ) -> None:
+    def setAutoIncrement(self, isAutoIncrement : bool ) -> None:
         """
         AUTO INCREMENT 制約をSQL文字列として設定する
         Args:
@@ -110,7 +108,7 @@ class Column:
             self.autoIncrementSql = ""
     #---------------------------------------------------------------------------
     @private
-    def __setDefaultSql(self, default : Default | None) -> None:
+    def setDefaultSql(self, default : Default | None) -> None:
         """
         DEFAULT 制約をSQL文字列として設定する
         Args:
@@ -119,7 +117,7 @@ class Column:
         self.defaultSql = default.toSql() if default else ""
     #---------------------------------------------------------------------------
     @private
-    def __setNotNullSql(self, notNull : NotNull | None) -> None:
+    def setNotNullSql(self, notNull : NotNull | None) -> None:
         """
         NOT NULL 制約をSQL文字列として設定する
         Args:
@@ -128,7 +126,7 @@ class Column:
         self.notNullSql = notNull.toSql() if notNull else ""
     #---------------------------------------------------------------------------
     @private
-    def __setUniqueSql(self, unique : Unique | None) -> None:
+    def setUniqueSql(self, unique : Unique | None) -> None:
         """
         UNIQUE 制約をSQL文字列として設定する
         Args:
@@ -137,7 +135,7 @@ class Column:
         self.uniqueSql = unique.toSql() if unique else ""
     #---------------------------------------------------------------------------
     @private
-    def __setForeignKeySql(self, foreignKey : ForeignKey | None) -> None:
+    def setForeignKeySql(self, foreignKey : ForeignKey | None) -> None:
         """
         FOREIGN KEY 制約をSQL文字列として設定する
         Args:
@@ -179,8 +177,6 @@ class Column:
     def __eq__(self, value):
         """
         等価比較演算子 ==
-        Returns:
-            Condition : (columnName, '=', value)
         """
         return Condition(self.tableName, self.columnName, "=", value)
     #---------------------------------------------------------------------------
@@ -225,5 +221,4 @@ class Column:
         OR演算子 OR
         """
         return ConditionGroup(self.tableName, self.columnName, "OR", value)
-        
 #-------------------------------------------------------------------------------

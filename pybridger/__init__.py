@@ -1,11 +1,4 @@
 #-------------------------------------------------------------------------------
-# 集計関数（Aggregate Functions）
-from .aggregate import Avg       # 平均
-from .aggregate import Count     # カウント
-from .aggregate import Max       # 最大
-from .aggregate import Min       # 最小
-from .aggregate import Sum       # 合計
-#-------------------------------------------------------------------------------
 # 制約（Constraints）
 from .constraints import Default      # デフォルト制約
 from .constraints import NotNull      # NULL不可制約
@@ -64,19 +57,9 @@ from .View import View
 #-------------------------------------------------------------------------------
 
 __all__ = [
-    # Aggregate Functions
-    "Avg", "Count", "Max", "Min", "Sum",
-
-    # Constraints
     "Default", "NotNull", "Unique", "ForeignKey",
-
-    # Conditions
     "Condition", "Regexp",
-
-    # CSV
     "CSV",
-
-    # Data Types
     "DataType",
     "Integer", "Long", "SmallInt", "TinyInt", "MediumInt",
     "Float", "Double", "Decimal",
@@ -88,35 +71,15 @@ __all__ = [
     "File",
     "Geometry", "Point", "LineString", "Polygon",
     "MultiLineString", "MultiPolygon", "GeometryCollection",
-
-    # DDL
     "DDL",
-
-    # Column
     "Column",
-
-    # Fields
     "BoolFiled", "FloatFiled", "IntFiled", "StrFiled", "DateTimeFiled", "TimeFiled",
-
-    # Index
     "Index",
-
-    # Engines
     "Engine", "AsyncEngine",
-
-    # Migration
     "Migration",
-
-    # Models
     "Model", "AsyncModel",
-    
-    # Session
     "Session",
-
-    # Trigger
     "Trigger",
-
-    # View
     "View"
 ]
 __version__ = "0.1.0"
