@@ -245,6 +245,15 @@
         │   │   ├── UpdateRecords.py                    # 同期複数レコード更新  
         │   │   └── __init__.py                         # recordパッケージ初期化ファイル  
         │   ├── [select]                                # SELECT系クエリ組み立て  
+        │   │   ├── [join]                              # joinパッケージ 
+        │   │   │   ├── CrossJoin.py                    # CROSS JOIN句
+        │   │   │   ├── FullOuterJoin.py                # FULL OUTER句
+        │   │   │   ├── InnerJoin.py                    # INNER JOIN句
+        │   │   │   ├── LeftJoin.py                     # LEFT JOIN句
+        │   │   │   ├── NaturalJoin.py                  # NATURAL JOIN句
+        │   │   │   ├── RightJoin.py                    # RIGHT JOIN句
+        │   │   │   ├── SelfJoin.py                     # SELF JOIN句
+        │   │   │   └── __init__.py                     # joinパッケージ初期化ファイル 
         │   │   ├── GroupBy.py                          # GROUP BY句組み立て  
         │   │   ├── Select.py                           # SELECT文組み立て  
         │   │   ├── Where.py                            # WHERE句組み立て  
@@ -259,7 +268,10 @@
         │   ├── AsyncModel.py                           # 非同期モデル基底クラス  
         │   ├── Model.py                                # 同期モデル基底クラス  
         │   ├── ModelMeta.py                            # モデルメタクラス定義  
-        │   └── __init__.py                             # modelパッケージ初期化ファイル  
+        │   └── __init__.py                             # modelパッケージ初期化ファイル
+        ├── [session]                                   # セッション関連    
+        │   ├── Session.py                              # セッションクラス 
+        │   └── __init__.py                             # modelパッケージ初期化ファイル    
         ├── README.md                                   # プロジェクト概要ドキュメント  
         └── __init__.py                                 # Briger2パッケージ初期化ファイル  
 
