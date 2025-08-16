@@ -3,12 +3,15 @@ from .Constraints import Constraints # 基底クラス
 from ..common     import private     # プライベートメソッド
 from ..common     import public      #　パブリックメソッド
 #-------------------------------------------------------------------------------
-class Check(Constraints):
-    def __init__(self, conditons : str) -> None:
+class TableLevelCheck(Constraints):
+    def __init__(self, *conditons : tuple[str]) -> None:
         self.__conditions = conditons
     #---------------------------------------------------------------------------
     @public
     def toSql(self) -> str:
-        sql = f"CHECK ({self.__conditions})"
+        sql = ""
+        for cond in self.__conditions:
+            sql += f"CHECK ({cond}),"
+        sql = sql[:-1]
         return sql
 #-------------------------------------------------------------------------------

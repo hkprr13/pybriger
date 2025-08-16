@@ -6,6 +6,7 @@ from .Default           import Default
 from .ForeignKey        import ForeignKey
 from .NotNull           import NotNull
 from .PrimaryKey        import PrimaryKey
+from .TableLevelCheck   import TableLevelCheck
 from .Unique            import Unique
 #-------------------------------------------------------------------------------
 __all__ = [
@@ -16,6 +17,7 @@ __all__ = [
     "ForeignKey",
     "NotNull",
     "PrimaryKey",
+    "TableLevelCheck",
     "Unique"
 ]
 #-------------------------------------------------------------------------------

@@ -98,10 +98,26 @@ class Sqlite3Engine(SqlEngine, Sqlite3DateTypes):
         try:
             self.conn = self.sqlEngine.connect(self.database)
             return self.conn
-        except Exception as e:
-            msg = "データベースの接続に失敗しました"
+        except sqlite3.IntegrityError as e:
+            msg = "制約違反(UNIQUE/NOT NULL/FOREIGN KEY/CHECK)です"
             self.__logError(msg)
             raise Exception(f"{msg}: {e}")
+        except sqlite3.OperationalError as e:
+            msg = "ロック/構文/存在しないテーブル/ファイル/I/Oなどのエラーです"
+            self.__logError(msg)
+            raise Exception(f"{msg}: {e}")
+        except sqlite3.ProgrammingError as e:
+            msg = "API誤用/バインド不一致/クローズ後操作/スレッド誤用などのエラーです"
+            self.__logError(msg)
+            raise Exception(f"{msg}: {e}")
+        except sqlite3.InterfaceError as e:
+            msg = "未対応型のバインドなどのエラーです"
+            self.__logError(msg)
+            raise Exception(f"{msg}: {e}")
+        except sqlite3.DatabaseError as e:
+            msg = "破損/形式不正などのエラーです"
+            self.__logError(msg)
+            raise Exception(f"{msg}: {e}")              
     #---------------------------------------------------------------------------
     @override
     @public

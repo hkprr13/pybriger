@@ -1,14 +1,4 @@
 #-------------------------------------------------------------------------------
-# mysql.connectorのインストールが出来ているかどうか確認
-try:
-    import mysql.connector
-except Exception as e:
-    raise Exception(
-        "mysql.connnectorがインストールされていません\n"
-        "下記をターミナルで実行してください\n"
-        "pip install mysql-connector-python"
-    )
-#-------------------------------------------------------------------------------
 from typing         import Any              # Any型クラス
 from .SqlEngine     import SqlEngine        # 基底SQLエンジンクラス
 from .datetypes     import MySqlDateTypes   # MySQLのデータ型クラス
@@ -56,7 +46,17 @@ class MySqlEngine(SqlEngine, MySqlDateTypes):
         self.password     = password
         self.databaseName = databaseName
         # インスタンス変数(オブジェクト)
-        self.sqlEngine  = mysql.connector
+        # インスタンスされたタイミングでインポートを行う
+        try:
+            import mysql.connector
+            self.sqlEngine  = mysql.connector
+        except Exception as e:
+            raise Exception(
+                "mysql.connnectorがインストールされていません\n"
+                "下記をターミナルで実行してください\n"
+                "pip install mysql-connector-python"
+            )
+        # コネクトオブジェクトとカーソルオブジェクトの初期化
         self.conn       = None # 初期値はNone
         self.cur        = None # 初期値はNone
         # ログの初期設定
@@ -129,7 +129,7 @@ class MySqlEngine(SqlEngine, MySqlDateTypes):
             # 問題なければ返す
             return self.conn
         # データベースとの接続が切れた場合
-        except mysql.connector.errors.OperationalError as oe:
+        except self.sqlEngine.errors.OperationalError as oe:
             try:
                 self.__logInfo("接続が切れています。再接続を試みます...")
                 # 再接続を試みる
@@ -148,16 +148,16 @@ class MySqlEngine(SqlEngine, MySqlDateTypes):
                 print(f"{msg}: {e}")
                 raise Exception
         # 認証エラーやデータベース指定ミスの場合
-        except mysql.connector.errors.ProgrammingError as pe:
+        except self.sqlEngine.errors.ProgrammingError as pe:
             msg = "認証エラーやデータベース指定ミスです"
             self.__logError(msg)
             raise Exception(f"{msg}: {pe}")
         # ネットワークの接続やソケットエラーの場合
-        except mysql.connector.errors.InterfaceError as ie:
+        except self.sqlEngine.errors.InterfaceError as ie:
             msg = "ソケットエラーやネットワークの接続エラーです"
             self.__logError(msg)
             raise Exception(f"{msg}: {ie}")
-        except mysql.connector.errors.Error as e:
+        except self.sqlEngine.errors.Error as e:
             # ユーザ名またはパスワードが違う場合
             if e.errno == 1045:
                 msg = "ユーザ名またはパスワードが間違っています"

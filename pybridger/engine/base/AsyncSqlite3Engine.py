@@ -1,14 +1,5 @@
 #-------------------------------------------------------------------------------
-# aiosqliteのインストールが出来ているかどうか確認
-try:
-    import aiosqlite
-except Exception as e:
-    raise Exception(
-        "aiosqliteがインストールされていません\n"
-        "下記をターミナルで実行してください\n"
-        "pip install aiosqlite"
-    )
-#-------------------------------------------------------------------------------
+from typing         import Any              # Anyクラス
 from .SqlEngine     import SqlEngine        # 規定SQLエンジンクラス
 from .datetypes     import Sqlite3DateTypes # Sqlite3のデータ型クラス
 from ...common      import override         # オーバライドメソッド
@@ -42,8 +33,19 @@ class AsyncSqlite3Engine(SqlEngine, Sqlite3DateTypes):
         super().__init__()
         # インスタンス変数
         self.database  = databasePath # データベースパス
-        self.sqlEngine = aiosqlite    # 非同期対応のSqlite3エンジン
-        # カーソルとコネクト      
+        # インスタンス変数(オブジェクト)
+        # インスタンスされたタイミングでインポートを行う
+        try:
+            import aiosqlite 
+            self.sqlEngine = aiosqlite # 非同期対応のSqlite3エンジン
+        # ドライバがインストールされていない場合エラーメッセージを表示させる
+        except ImportError:
+            raise Exception(
+                "aiosqliteがインストールされていません\n"
+                "下記をターミナルで実行してください\n"
+                "pip install aiosqlite"
+            )
+        # コネクトオブジェクトとカーソルオブジェクトの初期化   
         self.conn : aiosqlite.Connection | None = None # ← 明示的に定義
         self.cur  : aiosqlite.Cursor     | None = None # ← 明示的に定義
         # ログの初期設定
@@ -96,7 +98,7 @@ class AsyncSqlite3Engine(SqlEngine, Sqlite3DateTypes):
     #---------------------------------------------------------------------------
     @override
     @public
-    async def connect(self) -> aiosqlite.Connection:
+    async def connect(self) -> Any:
         """
         非同期でデータベースの接続
         Returns:
@@ -115,7 +117,7 @@ class AsyncSqlite3Engine(SqlEngine, Sqlite3DateTypes):
     #---------------------------------------------------------------------------
     @override
     @public
-    async def cursor(self) -> aiosqlite.Cursor:
+    async def cursor(self) -> Any:
         """
         非同期にカーソルを作成
         Returns:

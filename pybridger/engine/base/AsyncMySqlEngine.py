@@ -1,14 +1,4 @@
 #-------------------------------------------------------------------------------
-# aiomysqlのインストールが出来ているかどうか確認
-try:
-    import aiomysql
-except Exception as e:
-    raise Exception(
-        "mysql.connnectorがインストールされていません\n"
-        "下記をターミナルで実行してください\n"
-        "pip install aiomysql"
-    )
-#-------------------------------------------------------------------------------
 from typing         import Any              # Any型クラス
 from .SqlEngine     import SqlEngine        # 基底SQLエンジンクラス
 from .datetypes     import MySqlDateTypes   # MySQLのデータ型クラス
@@ -55,10 +45,21 @@ class AsyncMySqlEngine(SqlEngine, MySqlDateTypes):
         self.userName     = userName
         self.password     = password
         self.databaseName = databaseName
+        # インスタンスされたタイミングでインポートを行う
         # インスタンス変数(オブジェクト)
-        self.sqlEngine  = aiomysql
-        self.conn       = None # 初期値はNone
-        self.cur        = None # 初期値はNone
+        try:
+            import aiomysql
+            self.sqlEngine  = aiomysql
+         # ドライバがインストールされていない場合エラーメッセージを表示させる
+        except Exception as e:
+            raise Exception(
+                "mysql.connnectorがインストールされていません\n"
+                "下記をターミナルで実行してください\n"
+                "pip install aiomysql"
+            )
+        # コネクトオブジェクトとカーソルオブジェクトの初期化
+        self.conn = None # 初期値はNone
+        self.cur  = None # 初期値はNone
         # ログの初期設定
         self.__setLog(logFile)
     #---------------------------------------------------------------------------

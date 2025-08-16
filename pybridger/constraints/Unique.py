@@ -7,9 +7,10 @@ class Unique(Constraints):
     """
     ユニーク制約クラス
     """
-    def __init__(self):
+    def __init__(self, isUnique : bool):
         """
         """
+        self.__isUnique = isUnique
     #---------------------------------------------------------------------------
     def toSql(self) -> str:
         """
@@ -17,6 +18,8 @@ class Unique(Constraints):
         Returns:
             str: UNIQUE制約のSQL
         """
-
-        return "UNIQUE"
+        if self.__isUnique:
+            return "UNIQUE"
+        else:
+            return ""
 #-------------------------------------------------------------------------------

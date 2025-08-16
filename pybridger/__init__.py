@@ -1,9 +1,11 @@
 #-------------------------------------------------------------------------------
 # 制約（Constraints）
-from .constraints import Default      # デフォルト制約
-from .constraints import NotNull      # NULL不可制約
-from .constraints import Unique       # 一意制約
-from .constraints import ForeignKey   # 外部キー制約
+from .constraints import Default            # デフォルト制約
+from .constraints import NotNull            # NULL不可制約
+from .constraints import Unique             # 一意制約
+from .constraints import Check              # チェック制約
+from .constraints import TableLevelCheck    # テーブルレベルのチェック制約
+from .constraints import ForeignKey         # 外部キー制約
 #-------------------------------------------------------------------------------
 # CSV
 from .csv import CSV
@@ -32,7 +34,8 @@ from .ddl import DDL
 from .column import Column
 #-------------------------------------------------------------------------------
 # フィールド
-from .filed import BoolFiled, DateTimeFiled, FloatFiled, IntFiled, StrFiled, TimeFiled
+from .filed import BoolFiled, DateTimeFiled
+from .filed import FloatFiled, IntFiled, StrFiled, TimeFiled
 #-------------------------------------------------------------------------------
 # インデックス
 from .index import Index
@@ -58,6 +61,7 @@ from .View import View
 
 __all__ = [
     "Default", "NotNull", "Unique", "ForeignKey",
+    "Check", "TableLevelCheck",
     "Condition", "Regexp",
     "CSV",
     "DataType",
@@ -73,7 +77,8 @@ __all__ = [
     "MultiLineString", "MultiPolygon", "GeometryCollection",
     "DDL",
     "Column",
-    "BoolFiled", "FloatFiled", "IntFiled", "StrFiled", "DateTimeFiled", "TimeFiled",
+    "BoolFiled", "FloatFiled", "IntFiled",
+    "StrFiled", "DateTimeFiled", "TimeFiled",
     "Index",
     "Engine", "AsyncEngine",
     "Migration",
@@ -82,5 +87,5 @@ __all__ = [
     "Trigger",
     "View"
 ]
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 #-------------------------------------------------------------------------------
