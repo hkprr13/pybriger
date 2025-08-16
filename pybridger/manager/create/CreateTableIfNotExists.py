@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
-from ..Base    import Base   # 基底クラス
-from ...common import public # パブリックメソッド
+from ..Base         import Base   # 基底クラス
+from ...common      import public # パブリックメソッド
+from ...query       import Query  # クエリクラス
 #-------------------------------------------------------------------------------
 class CreateTableIfNotExists(Base):
     """テーブル作成クラスの初期化"""
@@ -16,15 +17,5 @@ class CreateTableIfNotExists(Base):
             columns   (str) : CREATE TABLE (...);の...部分
         """
         super().__init__(tableName)
-        self.__query = f"CREATE TABLE IF NOT EXISTS {tableName} ({columns});"
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self):
-        """クエリ"""
-        return self.__query
-    #---------------------------------------------------------------------------
-    @public
-    def execute(self):
-        return super().execute(self.__query)
+        self.query = f"CREATE TABLE IF NOT EXISTS {tableName} ({columns});"
 #-------------------------------------------------------------------------------

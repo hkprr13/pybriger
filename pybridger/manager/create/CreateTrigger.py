@@ -1,7 +1,8 @@
 #-------------------------------------------------------------------------------
-from ..Base    import Base    # 基底クラス
-from ...common import private # プライベートメソッド
-from ...common import public  # パブリックメソッド
+from ..Base         import Base    # 基底クラス
+from ...common      import private # プライベートメソッド
+from ...common      import public  # パブリックメソッド
+from ...query       import Query   # クエリクラス
 #-------------------------------------------------------------------------------
 class CreateTrigger(Base):
     #---------------------------------------------------------------------------
@@ -76,14 +77,4 @@ class CreateTrigger(Base):
             raise Exception(f"使えない引数:{event} を指定しています。")
         query += f"ON {tableName} EACH ROW BIGIN {body} END;"
         return query
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self) -> str:
-        """クエリ"""
-        return self.__query
-    #---------------------------------------------------------------------------
-    @public
-    def execute(self):
-        return super().execute(self.__query)
 #-------------------------------------------------------------------------------

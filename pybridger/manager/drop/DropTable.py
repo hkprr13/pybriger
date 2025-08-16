@@ -11,14 +11,5 @@ class DropTable(Base):
             tableName (str) : テーブル名
         """
         super().__init__(tableName)
-        self.__query = f"DROP TABLE {self.tableName}"
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self):
-        """クエリ"""
-        return self.__query
-    #---------------------------------------------------------------------------
-    def execute(self):
-        self.sqlEngine.execute(self.__query)
+        self.query = f"DROP TABLE {self.tableName}"
 #-------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
-from ..Base    import Base   # 基底クラス
-from ...common import public # パブリックメソッド
+from ..Base         import Base   # 基底クラス
+from ...common      import public # パブリックメソッド
+from ...query       import Query  # クエリクラス
 #-------------------------------------------------------------------------------
 class DropIndex(Base):
     """インデックス削除クラス"""
@@ -16,14 +17,5 @@ class DropIndex(Base):
             indexName (str) : インデックス名
         """
         super().__init__(tableName)
-        self.__query = f"DROP INDEX {indexName};"
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self):
-        """クエリ"""
-        return self.__query
-    #---------------------------------------------------------------------------
-    def execute(self):
-        self.sqlEngine.execute(self.__query)
+        self.query = f"DROP INDEX {indexName};"
 #-------------------------------------------------------------------------------

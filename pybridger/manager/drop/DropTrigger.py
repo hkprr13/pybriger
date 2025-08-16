@@ -16,14 +16,5 @@ class DropTrigger(Base):
             triggerName (str) : トリガー名
         """
         super().__init__(tableName)
-        self.__query = f"DROP TRIGGER {triggerName};"
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self):
-        """クエリ"""
-        return self.__query
-    #---------------------------------------------------------------------------
-    def execute(self):
-        self.sqlEngine.execute(self.__query)
+        self.query = f"DROP TRIGGER {triggerName};"
 #-------------------------------------------------------------------------------

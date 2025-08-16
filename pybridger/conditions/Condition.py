@@ -1,14 +1,35 @@
 #-------------------------------------------------------------------------------
-from ..column   import Column
+from typing     import Any      # Any
+from ..column   import Column   # カラムクラス
+from ..common   import public
+from ..query    import Query    # クエリクラス
 #-------------------------------------------------------------------------------
 class Condition:
+    """
+    条件式クラス
+    """
     #---------------------------------------------------------------------------
-    def __init__(self, tableName, left, operator = None, right = None):
+    def __init__(
+            self,
+            tableName : str | None,
+            left      : Any,
+            operator  : Any | None = None,
+            right     : Any | None = None
+        ):
+        """
+        条件式クラス
+        Args:
+            tableName (str | None) : テーブル名
+            left      (Any)        : 左の条件
+            operator  (Any | None) : 比較文
+            right     (Any | None) : 右の条件
+        """
         self.tableName = tableName
         self.left     = left
         self.operator = operator
         self.right    = right
     #---------------------------------------------------------------------------
+    @public
     def toSql(self, placeHolder = "?"):
         # leftがConditonオブジェクトなら,再帰的にtoSql()を呼び出す
         if isinstance(self.left, Condition):

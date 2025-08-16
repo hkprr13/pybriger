@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
-from ..common import public  # パブリックメソッド
-from ..config import Config  # コンフィグクラス
+from ..common   import public  # パブリックメソッド
+from ..config   import Config  # コンフィグクラス
+from ..query    import Query # クエリクラス
 #-------------------------------------------------------------------------------
 class Base:
     """
@@ -9,6 +10,9 @@ class Base:
     def __init__(self, tableName : str):
         """初期化"""
         self.tableName = tableName
+        self.query : str
+        self.value : tuple
+        self.data  : list[tuple[str]]
     #---------------------------------------------------------------------------
     @property
     @public
@@ -31,14 +35,14 @@ class Base:
 
     # #---------------------------------------------------------------------------
     @public
-    def execute(self, query : str, value : tuple = ()):
+    def execute(self):
         """クエリの実行"""
-        self.sqlEngine.execute(query, value)
+        self.sqlEngine.execute(Query(self.query), self.value)
     #---------------------------------------------------------------------------
     @public
-    def executeAny(self, query : str, data : list[tuple[str]]):
+    def executeAny(self):
         """複数クエリの実行"""
-        self.sqlEngine.executeAny(query, data)
+        self.sqlEngine.executeAny(Query(self.query), self.data)
     #---------------------------------------------------------------------------
     @public
     def commit(self):
@@ -54,8 +58,4 @@ class Base:
     def rollback(self):
         """ロールバック"""
         self.sqlEngine.rollback()
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self) -> str:...
 #-------------------------------------------------------------------------------

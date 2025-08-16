@@ -63,7 +63,7 @@ class Filed(Column):
     @private
     def setUniqueSql(self) -> None:
         return super().setUniqueSql(
-            Unique()
+            Unique(self.isUnique)
         )
     #---------------------------------------------------------------------------
     @override

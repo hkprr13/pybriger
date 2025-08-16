@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
-from ..Base    import Base   # 基底クラス
-from ...common import public # パブリックメソッド
+from ..Base     import Base   # 基底クラス
+from ...common  import public # パブリックメソッド
+from ...query   import Query  # クエリクラス
 #-------------------------------------------------------------------------------
 class CreateView(Base):
     def __init__(
@@ -15,9 +16,9 @@ class CreateView(Base):
     #---------------------------------------------------------------------------
     @public
     def where(self, **conditon):
-        query = f"CREATE VIEW {self.__viewName} AS"
-        con = ""
-        for key, value in conditon.items():
-            con += f"{key} = {value}"
         return ...
 #-------------------------------------------------------------------------------
+
+class Where(Base):
+    def __init__(self, tableName: str):
+        super().__init__(tableName)

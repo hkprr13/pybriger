@@ -76,25 +76,10 @@ class Where(Base):
         """
         super().__init__(tableName)
         # クエリ
-        self.__query = f"UPDATE {tableName} SET {columns}" \
-                     + f"WHERE {conditions};"
+        query = f"UPDATE {tableName} SET {columns}" \
+              + f"WHERE {conditions};"
         # プレイスホルダーをSQLによって置き換える
-        self.__query = self.__query.replace("?", self.sqlEngine.PLACEHOLDER)
+        self.query = query.replace("?", self.sqlEngine.PLACEHOLDER)
         # 値
-        self.__data = data
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self):
-        """クエリ"""
-        return self.__query
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def values(self):
-        """値"""
-        return self.__data
-    #---------------------------------------------------------------------------
-    def execute(self):
-        return super().executeAny(self.__query, self.__data)
+        self.data = data
 #-------------------------------------------------------------------------------

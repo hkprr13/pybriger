@@ -6,6 +6,7 @@ from ...common      import override         # オーバライドメソッド
 from ...common      import public           # パブリックメソッド
 from ...common      import private          # プライベートメソッド
 from ...Log         import Log              # ログクラス
+from ...query       import Query            # クエリクラス
 #-------------------------------------------------------------------------------
 class Sqlite3Engine(SqlEngine, Sqlite3DateTypes):
     """
@@ -145,7 +146,7 @@ class Sqlite3Engine(SqlEngine, Sqlite3DateTypes):
     #---------------------------------------------------------------------------    
     @override
     @public
-    def execute(self, query : str, value : tuple = ()) -> None:
+    def execute(self, query : Query, value : tuple = ()) -> None:
         """
         クエリを実行
         Args:
@@ -156,7 +157,7 @@ class Sqlite3Engine(SqlEngine, Sqlite3DateTypes):
         """
         try:
             self.__logDebug(f"クエリ:{query}, 値:{value}")
-            self.cursor().execute(query, value)
+            self.cursor().execute(query.sql, value)
         except Exception as e:
             msg  = "クエリの実行に失敗しました"
             qmsg = f"クエリ:{query}, 値:{value}"
@@ -166,15 +167,15 @@ class Sqlite3Engine(SqlEngine, Sqlite3DateTypes):
     #---------------------------------------------------------------------------
     @override
     @public
-    def executeAny(self, query: str, data: list[tuple[str]]):
+    def executeAny(self, query : Query, data: list[tuple[str]]):
         """
         クエリの実行(複数)
         Raises:
             Exception : クエリの実行に失敗した場合
         """
         try:
-            self.__logDebug(f"クエリ:{query}, 値:{data}")
-            self.cursor().executemany(query, data)
+            self.__logDebug(f"クエリ:{query.sql}, 値:{data}")
+            self.cursor().executemany(query.sql, data)
         except Exception as e:
             msg  = "クエリの実行に失敗しました"
             qmsg = f"クエリ:{query}, 値:{data}"
@@ -266,6 +267,11 @@ class Sqlite3Engine(SqlEngine, Sqlite3DateTypes):
             msg = "ロールバックに失敗しました"
             self.__logError(msg)
             raise Exception(f"{msg}: {e}") 
+    #---------------------------------------------------------------------------
+    @public
+    def fetchall(self):
+        if not self.cur is None:
+            return self.cur.fetchall()
     #---------------------------------------------------------------------------
     @override
     @public

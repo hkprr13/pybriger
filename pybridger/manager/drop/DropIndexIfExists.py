@@ -16,14 +16,5 @@ class DropIndexIfExists(Base):
             indexName (str) : インデックス名
         """
         super().__init__(tableName)
-        self.__query = f"DROP INDEX IF NOT EXISTS{indexName};"
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self):
-        """クエリ"""
-        return self.__query
-    #---------------------------------------------------------------------------
-    def execute(self):
-        self.sqlEngine.execute(self.__query)
+        self.query = f"DROP INDEX IF NOT EXISTS{indexName};"
 #-------------------------------------------------------------------------------

@@ -1,8 +1,9 @@
 #-------------------------------------------------------------------------------
-from ..common import private
-from ..common import public
-from ..config import Config
-from ..column import Column
+from ..common       import private # プライベートメソッド
+from ..common       import public  # パブリックメソッド
+from ..config       import Config  # コンフィグクラス
+from ..column       import Column  # カラムクラス
+from ..query        import Query   # クエリクラス
 #-------------------------------------------------------------------------------
 class Index:
     def __init__(
@@ -53,7 +54,7 @@ class Index:
         query = f"CREATE INDEX {self.__indexName} ON {colToSql};"
         # エンジンが設定されていたら
         if not self.__sqlEngine is None:
-            self.__sqlEngine.execute(query = query)
+            self.__sqlEngine.execute(Query(query))
             self.__sqlEngine.commit()
         else:
             raise Exception("エンジンが未設定です")
@@ -67,7 +68,7 @@ class Index:
         query = f"DROP INDEX IF NOT EXISTS {self.__indexName};"
         # エンジンが設定されていたら
         if not self.__sqlEngine is None:
-            self.__sqlEngine.execute(query = query)
+            self.__sqlEngine.execute(Query(query))
             self.__sqlEngine.commit()
         else:
             raise Exception("エンジンが未設定です")  

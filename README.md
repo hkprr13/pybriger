@@ -273,7 +273,7 @@
         │   ├── Session.py                              # セッションクラス 
         │   └── __init__.py                             # modelパッケージ初期化ファイル    
         ├── README.md                                   # プロジェクト概要ドキュメント  
-        └── __init__.py                                 # Briger2パッケージ初期化ファイル  
+        └── __init__.py                                 # Bridgerパッケージ初期化ファイル  
 
 ## 作者・連絡先
     name  : KazuhiroKondo

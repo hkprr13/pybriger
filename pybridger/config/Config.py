@@ -12,4 +12,8 @@ class Config:
     sqlEngine      : Sqlite3Engine       | MySqlEngine      | None = None
     asyncSqlEngine : AsyncSqlite3Engine  | AsyncMySqlEngine | None = None
     database : str | None = None
+    sqlite3Engine      : Sqlite3Engine
+    MySqlEngine        : MySqlEngine
+    asyncSqlite3Engine : AsyncSqlite3Engine
+    asyncMySqlEngine   : AsyncMySqlEngine
 #-------------------------------------------------------------------------------

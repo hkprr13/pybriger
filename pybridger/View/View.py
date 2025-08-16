@@ -5,6 +5,7 @@ from ..common     import public    # パブリックメソッド
 from ..config     import Config    # コンフィグクラス
 from ..column     import Column    # カラムクラス
 from ..conditions import Condition # 条件クラス
+from ..query      import Query     # クエリクラス
 #-------------------------------------------------------------------------------
 class View:
     """
@@ -69,7 +70,7 @@ class View:
             self,
             replace             : bool = False,
             checkOption         : bool = False,
-            localCheckOpetion   : bool = False,
+            localCheckOption    : bool = False,
             cascadedCheckOption : bool = False,
             securityDefiner     : bool = False,
             readOnly            : bool = False
@@ -80,7 +81,7 @@ class View:
             Args:
                 replace             (bool) : 既存のビューを置き換える
                 checkOption         (bool) : ビューを通した更新を制限
-                localCheckOpetion   (bool) : ネストビューで自分自身の条件のみを強制
+                localCheckOption    (bool) : ネストビューで自分自身の条件のみを強制
                 cascadedCheckOption (bool) : ネストビューすべての条件を強制
                 securityDefiner     (bool) : ビューを作成したユーザ権限で実行
                 readOnly            (bool) : ビューから書き込み操作を禁止
@@ -103,7 +104,7 @@ class View:
         if checkOption:
             withClaises.append("CHECK OPTION")
         # ローカルチェックオプションが有効なら
-        if localCheckOpetion:
+        if localCheckOption:
             withClaises.append("LOCAL CHECK OPTION")
         # カスケードチェックオプションが有効なら
         if cascadedCheckOption:
@@ -120,7 +121,7 @@ class View:
             query += ";"
         else:
             query = query[:-1] + ";" # 末尾にスペースを削除する
-        self.__sqlEngine.execute(query = query)
+        self.__sqlEngine.execute(query = Query(query))
         self.__sqlEngine.commit()
     #---------------------------------------------------------------------------
     @public
@@ -144,7 +145,7 @@ class View:
         """
         # クエリ
         query = f"DROP VIEW IF EXISTS {self.__viewName};"
-        self.__sqlEngine.execute(query = query)
+        self.__sqlEngine.execute(query = Query(query))
         self.__sqlEngine.commit()
     #---------------------------------------------------------------------------
     @public

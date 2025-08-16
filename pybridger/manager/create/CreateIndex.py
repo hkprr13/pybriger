@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
-from ..Base    import Base   # 基底クラス
-from ...common import public # パブリックメソッド
+from ..Base         import Base   # 基底クラス
+from ...common      import public # パブリックメソッド
+from ...query       import Query  # クエリクラス
 #-------------------------------------------------------------------------------
 class CreateIndex(Base):
     """インデックス作成クラス"""
@@ -18,14 +19,5 @@ class CreateIndex(Base):
                 columns   (str) : カラム(文字列形式)
         """
         super().__init__(tableName)
-        self.__query = f"CREATE {indexName} ON {tableName} ({columns});"
-    #---------------------------------------------------------------------------
-    @public
-    @property
-    def query(self):
-        return self.__query 
-    #---------------------------------------------------------------------------
-    @public
-    def exexute(self):
-        self.sqlEngine.execute(self.__query)
+        self.query = f"CREATE {indexName} ON {tableName} ({columns});"
 #-------------------------------------------------------------------------------

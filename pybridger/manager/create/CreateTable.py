@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
-from ..Base          import Base          # 基底クラス
-from ...common       import public        # パブリックメソッド
+from ..Base         import Base   # 基底クラス
+from ...common      import public # パブリックメソッド
+from ...query       import Query  # クエリクラス
 #-------------------------------------------------------------------------------
 class CreateTable(Base):
     """
@@ -20,15 +21,5 @@ class CreateTable(Base):
         """
         super().__init__(tableName)
         # クエリ
-        self.__query = f"CREATE TABLE {tableName} ({columns});"
-    #---------------------------------------------------------------------------
-    @property
-    @public
-    def query(self):
-        """クエリ"""
-        return self.__query
-    #---------------------------------------------------------------------------
-    @public
-    def execute(self):
-        return super().execute(self.__query)
+        self.query = f"CREATE TABLE {tableName} ({columns});"
 #-------------------------------------------------------------------------------

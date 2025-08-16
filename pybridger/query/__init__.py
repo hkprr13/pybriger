@@ -1,15 +1,7 @@
 #-------------------------------------------------------------------------------
-from .InterFace     import interface
-from .Internal      import internal
-from .Override      import override
-from .Private       import private
-from .Public        import public
+from .Query import Query
 #-------------------------------------------------------------------------------
 __all__ = [
-    "interface",
-    "internal",
-    "override",
-    "private",
-    "public"
+    "Query"
 ]
 #-------------------------------------------------------------------------------

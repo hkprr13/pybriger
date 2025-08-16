@@ -1,18 +1,20 @@
 #-------------------------------------------------------------------------------
-import os 
+import os
 import sys
+import re
 import importlib.util
-from datetime import datetime
-from ..engine import MySqlEngine
-from ..engine import Sqlite3Engine
-from ..model import Model
-from ..common import public
-from ..common import private
-from ..column import Column
-from ..constraints import Unique
-from ..datatypes import Integer
-from ..datatypes import Text
-from ..config import Config
+from datetime       import datetime
+from ..engine       import MySqlEngine
+from ..engine       import Sqlite3Engine
+from ..model        import Model
+from ..common       import public
+from ..common       import private
+from ..column       import Column
+from ..constraints  import Unique
+from ..datatypes    import Integer
+from ..datatypes    import Text
+from ..config       import Config
+from ..query        import Query
 #-------------------------------------------------------------------------------
 class Migration:
     def __init__(
@@ -27,10 +29,22 @@ class Migration:
         super().__init__()
         self.__migrationsDir = migrationsDir
         os.makedirs(migrationsDir, exist_ok = True)
-        self.__sqlEngine.execute(self.__buildCreateTableSql())
+        self.__sqlEngine.execute(self.__buildCreateTableSql)
         self.__sqlEngine.commit()
         print("初期化完了")
     #---------------------------------------------------------------------------
+    @property
+    @private
+    def __sqlEngine(self):
+        """
+        sqlエンジンの設定
+        """
+        engine = Config.sqlEngine
+        if engine is None:
+            raise Exception("エンジンが未設定です")
+        return engine
+    #---------------------------------------------------------------------------
+    @property
     @private
     def __buildCreateTableSql(self):
         query = "CREATE TABLE IF NOT EXISTS migration (" \
@@ -54,18 +68,12 @@ class Migration:
             )
         else:
             raise Exception("エンジンが未設定です")
-        return query
+        return Query(query)
     #---------------------------------------------------------------------------
     @property
     @private
-    def __sqlEngine(self):
-        """
-        sqlエンジンの設定
-        """
-        engine = Config.sqlEngine
-        if engine is None:
-            raise Exception("エンジンが未設定です")
-        return engine
+    def __bulidHistoryQuery(self):
+        return Query("SELECT name FROM migration ORDER BY id")
     #---------------------------------------------------------------------------
     def make(self, name : str) -> None:
         """
@@ -74,7 +82,8 @@ class Migration:
             name (str) : マイグレーション名
         """
         timeStamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        fileName  = f"{timeStamp}_{name.replace('', '_')}.py"
+        fileName  = f"{timeStamp}_" \
+                  + f"{re.sub(r'[^0-9A-Za-z_]+', '_', name.strip())}.py"
         filePath  = os.path.join(self.__migrationsDir, fileName)
         templete = f"""\
 def upgrade(engine):
@@ -94,8 +103,10 @@ def downgrade(engine):
         Returns:
             list[str] : ファイル名のリスト
         """
-        cur = self.__sqlEngine.cursor()
-        cur.execute("SELECT name FROM migration ORDER BY id")
-        rows = cur.fetchall()
-        return []
+        self.__sqlEngine.execute(self.__bulidHistoryQuery)
+        rows = self.__sqlEngine.fetchall()
+        if rows:
+            return [r[0] for r in rows]
+        else:
+            return []
 #-------------------------------------------------------------------------------

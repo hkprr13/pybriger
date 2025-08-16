@@ -2,10 +2,13 @@
 from typing         import Any              # Any型クラス
 from .SqlEngine     import SqlEngine        # 基底SQLエンジンクラス
 from .datetypes     import MySqlDateTypes   # MySQLのデータ型クラス
+from ...common      import interface        # インタフェースデコレーター
+from ...common      import internal         # 内部専用デコレーター
 from ...common      import override         # オーバライドメソッド
 from ...common      import public           # パブリックメソッド
 from ...common      import private          # プライベートメソッド
 from ...Log         import Log              # ログクラス
+from ...query       import Query            # クエリクラス
 #-------------------------------------------------------------------------------
 class MySqlEngine(SqlEngine, MySqlDateTypes):
     """
@@ -208,7 +211,7 @@ class MySqlEngine(SqlEngine, MySqlDateTypes):
     #---------------------------------------------------------------------------
     @override
     @public
-    def execute(self, query: str, value : tuple = ()) -> None:
+    def execute(self, query: Query, value : tuple = ()) -> None:
         """
         クエリの実行
         Args:
@@ -218,8 +221,8 @@ class MySqlEngine(SqlEngine, MySqlDateTypes):
             Exception : クエリの実行に失敗した場合
         """
         try:
-            self.__logDebug(f"クエリ:{query}, 値:{value}")
-            self.cursor().execute(query, value)
+            self.__logDebug(f"クエリ:{query.sql}, 値:{value}")
+            self.cursor().execute(query.sql, value)
         except Exception as e:
             msg  = "クエリの実行に失敗しました"
             qmsg = f"クエリ:{query}, 値:{value}"
@@ -229,7 +232,7 @@ class MySqlEngine(SqlEngine, MySqlDateTypes):
     #---------------------------------------------------------------------------
     @override
     @public
-    def executeAny(self, query: str, data : list[tuple[str]]) -> None:
+    def executeAny(self, query : Query, data : list[tuple[str]]) -> None:
         """
         クエリの実行(複数)
         Args:
@@ -239,8 +242,8 @@ class MySqlEngine(SqlEngine, MySqlDateTypes):
             Exception : クエリの実行に失敗した場合
         """
         try:
-            self.__logDebug(f"クエリ:{query}, 値:{data}")
-            self.cursor().executemany(query, data)
+            self.__logDebug(f"クエリ:{query.sql}, 値:{data}")
+            self.cursor().executemany(query.sql, data)
         except Exception as e:
             msg  = "クエリの実行に失敗しました"
             qmsg = f"クエリ:{query}, 値:{data}"
@@ -334,6 +337,12 @@ class MySqlEngine(SqlEngine, MySqlDateTypes):
             msg = "ロールバックに失敗しました"
             self.__logError(msg)
             raise Exception(f"{msg}: {e}") 
+    #---------------------------------------------------------------------------
+    @override
+    @public
+    def fetchall(self):
+        if not self.cur is None:
+            return self.cur.fetchall()
     #---------------------------------------------------------------------------
     @override
     @public

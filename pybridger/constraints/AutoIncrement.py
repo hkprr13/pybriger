@@ -6,7 +6,8 @@ from ..config       import Config       # コンフィグクラス
 #-------------------------------------------------------------------------------
 class AutoIncrement(Constraints):
     def __init__(self) -> None:
-        ...
+        pass
+    #--------------------------------------------------------------------------
     @public
     def toSql(self) -> str:
         engine = Config.sqlEngine
